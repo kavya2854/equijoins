@@ -72,3 +72,20 @@ def emp_mgr_dept(request):
 
     d={'emd':emd}
     return render(request,'emp_mgr_dept.html',d)
+
+
+def emp_salgrade(request):
+    # EO=Employee.objects.all()
+    # SO=Salgrade.objects.all()
+
+    # Retrieving the data of employess who belongs to grade 3
+    # SO=Salgrade.objects.filter(grade=3)
+    # EO=Employee.objects.filter(sal__range=(SO[0].lowsal,SO[0].highsal))
+
+    SO=Salgrade.objects.filter(grade__in=(3,4))
+
+    EO=Employee.objects.none()
+    for sgo in SO:
+        EO=EO|Employee.objects.filter(sal__range=(sgo.lowsal,sgo.highsal))
+    d={'EO':EO,'SO':SO}
+    return render(request,'emp_salgrade.html',d)
